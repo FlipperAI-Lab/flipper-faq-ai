@@ -9,7 +9,7 @@ from pathlib import Path
 from functools import lru_cache
 from sentence_transformers import SentenceTransformer, util
 
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher
 from aiogram.types import (
     InlineQuery, InlineQueryResultArticle,
     InputTextMessageContent, InlineKeyboardButton,
