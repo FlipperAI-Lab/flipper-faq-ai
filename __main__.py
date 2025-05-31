@@ -24,6 +24,8 @@ from config import TOKEN
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'  # Отключаем oneDNN оптимизации
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'   # Снижаем уровень логов TensorFlow
 
+START_TIME = time.time()
+
 class FAQ_flipper_Bot:
     def __init__(self, faq_dir="faq"):
         self.model = None
@@ -133,7 +135,25 @@ async def start_command(message: Message):
 
 @dp.message(Command("info"))
 async def info_command(message: Message):
-    await message.answer(text="инфо")
+    # Рассчитываем время работы
+    uptime_seconds = int(time.time() - START_TIME)
+    days, remainder = divmod(uptime_seconds, 86400)
+    hours, remainder = divmod(remainder, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    
+    # Форматируем время
+    uptime_str = f"<i>{days}</i> Д. <i>{hours}</i> Ч. <i>{minutes}</i> Мин."
+    
+    # Собираем информацию о боте
+    info_text = (
+        "🤖 <b>Информация о боте</b>\n\n"
+        f"• <b>Аптайм:</b> {uptime_str}\n"
+        f"• <b>Категорий FAQ:</b> <code>{len(faq_bot.faq)}</code>\n"
+        f"• <b>Всего вопросов:</b> <code>{len(faq_bot.question_map)}</code>\n\n"
+        f"<b>GitHub:</b> <i>github.com/FlipperAI-Lab/flipper-faq-ai</i>"
+    )
+    
+    await message.answer(text=info_text)
 
 @dp.inline_query()
 async def handle_inline_query(inline_query: InlineQuery):
@@ -170,6 +190,8 @@ async def handle_inline_query(inline_query: InlineQuery):
         results.append(item)
     
     await inline_query.answer(results, is_personal=True, cache_time=1)
+
+
 
 async def main():
     await dp.start_polling(bot)
