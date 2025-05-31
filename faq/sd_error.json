@@ -1,12 +1,4 @@
 {
-    "triggers": [
-        "ошибка", "manifest", "crc", "экран", "флеха", "sd card", "карта памяти", "ошибка манифеста",
-        "checksum", "sd problem", "card issue", "ошибка карты", "не читается", "файловая система",
-        "форматирование", "bad sector", "повреждена", "не загружается", "система", "storage error",
-        "init failed", "data corrupt", "коррупция", "recovery", "восстановление", "fatal error",
-        "startup error", "загрузка", "boot", "invalid", "невалидный", "сбой", "fail", "ошибка crc32",
-        "sd access", "permission denied", "доступ запрещен"
-    ],
     "questions": [
         "экран флипа с ошибкой Manifest/CRC",
         "что делать при ошибке crc",
