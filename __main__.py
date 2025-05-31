@@ -37,6 +37,7 @@ class FaqFlipperBot:
 
         self.load_faq()
         self.load_model()
+        self.prepare_embeddings()
 
     def load_faq(self) -> None:
         """Загрузка FAQ из JSON-файлов в указанной директории без обработки триггеров"""
