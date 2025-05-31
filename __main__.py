@@ -145,7 +145,7 @@ async def info_command(message: Message) -> None:
 • <i>Категорий FAQ:</i> <code>{len(faq_bot.faq)}</code>
 • <i>Всего вопросов:</i> <code>{len(faq_bot.question_map)}</code>
 
-<i>GitHub:</i> <i>github.com/FlipperAI-Lab/flipper-faq-ai</i>"
+<i>GitHub:</i> <i>github.com/FlipperAI-Lab/flipper-faq-ai</i>
     """
 
     await message.answer(text=info_text)
