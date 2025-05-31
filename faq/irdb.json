@@ -25,5 +25,5 @@
         "где скачать русские пульты",
         "как создать свой пульт"
     ],
-    "answer": "IR базы для Flipper Zero:\nРепозиторий: https://github.com/logickworkshop/Flipper-IRDB \n⚠️ Используйте qFlipper для загрузки файлов"
+    "answer": "IR базы для Flipper Zero:\nGitHub репозиторий: https://github.com/logickworkshop/Flipper-IRDB\n⚠️ Используйте qFlipper для загрузки файлов"
 }
