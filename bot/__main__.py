@@ -42,21 +42,38 @@ class FaqFlipperBot:
         self.prepare_embeddings()
 
     def load_faq(self) -> None:
-        """Загрузка FAQ из JSON-файлов в указанной директории без обработки триггеров"""
+        """Загрузка FAQ из JSON-файлов с обработкой ошибок"""
         faq_path = Path(self.faq_dir)
         print(f"Загрузка FAQ из {self.faq_dir}...")
+        error_files = []
 
         for file_path in faq_path.glob("*.json"):
             category = file_path.stem
-            with open(file_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                
+                if "questions" not in data or "answer" not in data:
+                    raise ValueError(f"Некорректная структура файла {file_path.name}")
+                
                 self.faq[category] = {
                     "questions": data["questions"],
                     "answer": data["answer"]
                 }
-            print(f"Загружено: {category} ({len(data['questions'])} вопросов)")
+                print(f"Загружено: {category} ({len(data['questions'])} вопросов)")
+            
+            except (json.JSONDecodeError, ValueError) as e:
+                print(f"Ошибка в файле {file_path.name}: {str(e)}")
+                error_files.append(file_path.name)
+            except Exception as e:
+                print(f"Неизвестная ошибка в {file_path.name}: {str(e)}")
+                error_files.append(file_path.name)
 
-        print(f"Всего загружено {len(self.faq)} категорий FAQ")
+        print(f"\nВсего загружено: {len(self.faq)} корректных файлов")
+        if error_files:
+            print(f"Файлы с ошибками ({len(error_files)}):")
+            for fname in error_files:
+                print(f"  - {fname}")
 
     def load_model(self):
         """Загружает модель SentenceTransformer"""
