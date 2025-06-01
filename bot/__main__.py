@@ -88,6 +88,7 @@ class FaqFlipperBot:
 
     @lru_cache(maxsize=500)
     def get_query_embedding(self, text: str) -> np.ndarray:
+        """Получает эмбеддинг текстового запроса"""
         return self.model.encode([text], show_progress_bar=False)[0]
 
     def find_best_match(self, question: str, threshold: float = 0.6) -> str:
