@@ -85,7 +85,6 @@ class FaqFlipperBot:
         print(f"Рассчитано эмбеддингов: {len(self.all_embeddings)}")
 
     @lru_cache(maxsize=500)
-    """Получает эмбеддинг текстового запроса"""
     def get_query_embedding(self, text: str) -> np.ndarray:
         return self.model.encode([text], show_progress_bar=False)[0]
 
