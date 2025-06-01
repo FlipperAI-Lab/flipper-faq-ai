@@ -1,3 +1,4 @@
+import logging
 import asyncio
 import json
 import os
@@ -19,13 +20,14 @@ from aiogram.types import (
     InlineKeyboardMarkup, Message
 )
 
-from config import TOKEN
+from bot.config import TOKEN
 
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 START_TIME = time.time()
 
+logger = logging.getLogger(__name__)
 
 class FaqFlipperBot:
 
@@ -98,7 +100,7 @@ class FaqFlipperBot:
         max_idx = np.argmax(scores).item()
         max_score = scores[max_idx].item()
 
-        print(f"Поиск занял: {time.time()-start_time:.3f}с | Сходство: {max_score:.2f}")
+        logger.info(f"Вопрос {question} | Поиск занял: {time.time()-start_time:.3f}с | Сходство: {max_score:.2f}")
         return self.question_map[
             list(self.question_map.keys())[max_idx]
         ] if max_score > threshold else None
@@ -202,4 +204,4 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
 
-        print("Бот остановлен пользователем")
+        logger.warning("Бот остановлен пользователем")
