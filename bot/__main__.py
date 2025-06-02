@@ -42,34 +42,36 @@ class FaqFlipperBot:
         self.prepare_embeddings()
 
     def load_faq(self) -> None:
-        """Загрузка FAQ из JSON-файлов с обработкой ошибок"""
+        """Загрузка FAQ из JSON-файлов включая подпапки с обработкой ошибок"""
         faq_path = Path(self.faq_dir)
-        print(f"Загрузка FAQ из {self.faq_dir}...")
+        print(f"Zагрузка FAQ из {self.faq_dir}...")
         error_files = []
 
-        for file_path in faq_path.glob("*.json"):
-            category = file_path.stem
+        for file_path in faq_path.rglob("*.json"):
+
+            category = str(file_path.relative_to(faq_path).with_suffix(''))
+        
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     data = json.load(f)
-                
+            
                 if "questions" not in data or "answer" not in data:
-                    raise ValueError(f"Некорректная структура файла {file_path.name}")
-                
+                    raise ValueError(f"Некорректная структура файла")
+            
                 self.faq[category] = {
                     "questions": data["questions"],
                     "answer": data["answer"]
                 }
                 print(f"Загружено: {category} ({len(data['questions'])} вопросов)")
-            
+        
             except (json.JSONDecodeError, ValueError) as e:
-                print(f"Ошибка в файле {file_path.name}: {str(e)}")
-                error_files.append(file_path.name)
+                print(f"Ошибка в файле {file_path}: {str(e)}")
+                error_files.append(str(file_path))
             except Exception as e:
-                print(f"Неизвестная ошибка в {file_path.name}: {str(e)}")
-                error_files.append(file_path.name)
+                print(f"Неизвестная ошибка в {file_path}: {str(e)}")
+                error_files.append(str(file_path))
 
-        print(f"\nВсего загружено: {len(self.faq)} корректных файлов")
+        print(f"\nВсего загружено: {len(self.faq)} файлов из {self.faq_dir}")
         if error_files:
             print(f"Файлы с ошибками ({len(error_files)}):")
             for fname in error_files:
@@ -108,7 +110,7 @@ class FaqFlipperBot:
         """Получает эмбеддинг текстового запроса"""
         return self.model.encode([text], show_progress_bar=False)[0]
 
-    def find_best_match(self, question: str, threshold: float = 0.6) -> str:
+    def find_best_match(self, question: str, threshold: float = 0.75) -> str:
         """Прямой поиск по семантическому сходству"""
         start_time = time.time()
         clean_question = self.clean_question(question)
